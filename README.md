@@ -73,6 +73,7 @@ curl http://localhost:8000/api/cnpj/?mask=true \
 - `make migrate` : aplica migrations
 - `make shell`   : abre Django shell
 - `make celery`  : inicia worker Celery
+- `make superuser` : cria um superusuário Django
 
 ## Contribuindo
 Pull requests são bem-vindos. Abra issues para bugs ou melhorias.

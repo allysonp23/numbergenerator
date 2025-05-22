@@ -1,4 +1,4 @@
-.PHONY: up down restart build migrate shell logs celery
+.PHONY: up down restart build migrate shell logs celery superuser
 
 up:
 	@echo "Building and starting all services..."
@@ -33,3 +33,7 @@ celery:
 logs:
 	@echo "Attaching to logs..."
 	docker-compose logs -f
+
+superuser:
+	@echo "Creating Django superuser..."
+	docker-compose exec web python manage.py createsuperuser
