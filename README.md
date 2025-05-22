@@ -51,7 +51,7 @@ docker-compose up --build
 ## Autenticação (OAuth2)
 1. Crie super-usuário:
    ```bash
-docker-compose exec web python manage.py createsuperuser
+    docker-compose exec web python manage.py createsuperuser
 ```
 2. No Django Admin (/admin/), registre uma Application em OAuth2 Provider.
 3. Obtenha token:
@@ -65,8 +65,8 @@ curl -X POST http://localhost:8000/o/token/ \
 ```
 4. Use o token nas requisições:
    ```bash
-curl http://localhost:8000/api/cnpj/?mask=true \
-  -H 'Authorization: Bearer <access_token>'
+    curl http://localhost:8000/api/cnpj/?mask=true \
+    -H 'Authorization: Bearer <access_token>'
 ```
 
 ## Comandos úteis
