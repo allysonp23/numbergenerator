@@ -1,4 +1,4 @@
-.PHONY: up down restart build migrate shell logs celery superuser
+.PHONY: up down restart build migrate shell logs celery superuser jwt apikey
 
 up:
 	@echo "Building and starting all services..."
@@ -37,3 +37,7 @@ logs:
 superuser:
 	@echo "Creating Django superuser..."
 	docker-compose exec web python manage.py createsuperuser
+
+apikey:
+	@echo "Generating API key for $(name)..."
+	docker-compose exec web python manage.py shell -c "from rest_framework_api_key.models import APIKey; key, _ = APIKey.objects.create_key(name='$(name)'); print('API Key:', key)"

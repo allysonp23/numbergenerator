@@ -1,49 +1,5 @@
 import random
-
-# List of common Portuguese given names
-MALE_NAMES = [
-    "João", "Pedro", "Lucas", "Gabriel", "Matheus",
-    "Leonardo", "Gustavo", "Felipe", "Daniel", "Thiago",
-    "Bruno", "André", "Ricardo", "Eduardo", "Alexandre",
-    "Henrique", "Rafael", "Diego", "Victor", "Samuel",
-    "Fernando", "Marcelo", "Antônio", "Rodrigo", "Carlos",
-    "Adriano", "Vinícius", "Caio", "Fábio", "Igor",
-    "Júlio", "Cristian", "Emanuel", "Renan", "Roberto",
-    "Márcio", "Nelson", "Wagner", "Sebastião", "Otávio",
-    "Raul", "Osvaldo", "Sérgio", "Luciano", "Mauro",
-    "Elias", "Marcos", "José", "Heitor"
-]
-
-FEMALE_NAMES = [
-    "Maria", "Ana", "Júlia", "Mariana", "Beatriz",
-    "Camila", "Rafaela", "Sofia", "Isabela", "Carolina",
-    "Fernanda", "Larissa", "Vanessa", "Luana", "Gabriela",
-    "Tatiane", "Renata", "Patrícia", "Sandra", "Cláudia",
-    "Bruna", "Alessandra", "Simone", "Thaís", "Bianca",
-    "Cecília", "Natália", "Vitória", "Helena", "Cristiane",
-    "Débora", "Letícia", "Roberta", "Daniela", "Elisângela",
-    "Flávia", "Juliane", "Ivana", "Elaine", "Michelle",
-    "Sílvia", "Jéssica", "Marisa", "Estela", "Ludmila",
-    "Mônica", "Regina", "Tatiana", "Adriana", "Paula"
-]
-
-# Common Portuguese surnames
-SURNAMES = [
-    "Silva", "Santos", "Oliveira", "Sousa", "Lima",
-    "Costa", "Pereira", "Carvalho", "Rodrigues", "Almeida",
-    "Nunes", "Castro", "Freitas", "Gomes", "Fernandes",
-    "Martins", "Moreira", "Azevedo", "Monteiro", "Teixeira",
-    "Medeiros", "Cardoso", "Bezerra", "Vieira", "Machado",
-    "Campos", "Tavares", "Moraes", "Guimarães", "Cunha",
-    "Figueiredo", "Barreto", "Ávila", "Andrade", "Aragão",
-    "Brito", "Reis", "Fonseca", "Melo", "Bastos",
-    "Corrêa", "Passos", "Sales", "Siqueira", "Navarro",
-    "Dantas", "Coutinho", "Neves", "Rangel", "Queiroz",
-    "Albuquerque", "Bastiani", "Benício", "Bianchi", "Brandão",
-    "Camargo", "Capelo", "Caruso", "Damiani", "Domenici",
-    "Espinosa", "Fraga", "Lacerda", "Lancastre", "Mendonça",
-    "Montanha", "Pasqualini", "Quintana", "Sarmiento", "Toscano"
-]
+from .models import GivenName, Surname
 
 def generate_name(gender=None):
     """
@@ -55,6 +11,12 @@ def generate_name(gender=None):
     gender = (gender or '').lower()
     if gender not in ('male', 'female'):
         gender = random.choice(['male', 'female'])
-    first = random.choice(MALE_NAMES if gender == 'male' else FEMALE_NAMES)
-    surnames = random.sample(SURNAMES, 2)
+    # Map to model gender values
+    gender_code = 'M' if gender == 'male' else 'F'
+    # Fetch a random first name from the DB
+    first_qs = GivenName.objects.filter(gender=gender_code).values_list('name', flat=True)
+    first = random.choice(list(first_qs)) if first_qs else ''
+    # Fetch two random surnames from the DB
+    surname_qs = Surname.objects.all().values_list('name', flat=True)
+    surnames = random.sample(list(surname_qs), 2) if surname_qs else ['', '']
     return f"{first} {surnames[0]} {surnames[1]}"

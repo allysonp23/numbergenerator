@@ -16,7 +16,6 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     path('api/', include('cpf_cnpj.urls')),
     path('api/lorem/', include('lorem.urls')),
     path('api/phone/', include('phone.urls')),

@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'names.apps.NamesConfig',
     'bankaccount.apps.BankaccountConfig',
     'rest_framework',
-    'oauth2_provider',
+    'rest_framework_api_key',
     'drf_yasg',
 ]
 
@@ -142,18 +142,13 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
-# REST framework and OAuth2 settings
+# REST framework configuration with API Key
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework_api_key.authentication.APIKeyAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'numbergenerator.permissions.HasValidAPIKeyOrAuthenticated',
     ),
-}
-
-OAUTH2_PROVIDER = {
-    'ACCESS_TOKEN_EXPIRE_SECONDS': 36000,
-    'APPLICATION_MODEL': 'oauth2_provider.Application',
 }
