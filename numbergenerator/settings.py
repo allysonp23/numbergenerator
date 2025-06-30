@@ -42,10 +42,10 @@ INSTALLED_APPS = [
     'lorem.apps.LoremConfig',
     'phone.apps.PhoneConfig',
     'names.apps.NamesConfig',
-    'bankaccount.apps.BankaccountConfig',
+    'authentication.apps.AuthenticationConfig',
     'rest_framework',
-    'rest_framework_api_key',
     'drf_yasg',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -142,13 +142,29 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
-# REST framework configuration with API Key
+# Django REST Framework configuration
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_api_key.authentication.APIKeyAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'numbergenerator.permissions.HasValidAPIKeyOrAuthenticated',
-    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 }
+
+# JWT Configuration
+from datetime import timedelta
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+}
+
+# Kafka configuration
+KAFKA_BOOTSTRAP_SERVERS = ['localhost:9092']
+KAFKA_TOPIC_REQUESTS = 'generator_requests'
+KAFKA_TOPIC_RESULTS = 'generator_results'
+KAFKA_CONSUMER_GROUP = 'generator_workers'
+
+# Task storage (Redis for results)
+TASK_RESULT_BACKEND = 'redis://localhost:6379/1'
